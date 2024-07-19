@@ -367,6 +367,7 @@ func (p *Parser) parseQuotedString() (directives.QuotedString, error) {
 		qs  directives.QuotedString
 		err error
 	)
+	// TODO: Handle quoted doublequotes ("Restaurante \"La Cuarta\"").
 	if _, err := p.ReadCharacter('"'); err != nil {
 		return directives.SetRange(&qs, s.Range()), s.Annotate(err)
 	}
