@@ -87,7 +87,7 @@ func (r *fetchRunner) fetch(reg *registry.Registry, f string, cfg fetchConfig) e
 	if err != nil {
 		return err
 	}
-	if err := r.fetchPrices(reg, cfg, time.Now().AddDate(-1, 0, 0), time.Now(), pricesByDate); err != nil {
+	if err := r.fetchPrices(reg, cfg, time.Now().AddDate(-7, 0, 0), time.Now(), pricesByDate); err != nil {
 		return err
 	}
 	if err := r.writeFile(pricesByDate, absPath); err != nil {
