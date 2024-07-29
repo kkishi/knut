@@ -83,16 +83,21 @@ func (m *Model) Infer(t *syntax.Transaction) {
 	for i := range t.Bookings {
 		credit := t.Bookings[i].Credit.Extract()
 		debit := t.Bookings[i].Debit.Extract()
+		const threshold = -20
 		if credit == m.account {
-			t.Bookings[i].Credit = m.inferAccount(t, &t.Bookings[i], debit)
+			if account, score := m.inferAccount(t, &t.Bookings[i], debit); score > threshold {
+				t.Bookings[i].Credit = account
+			}
 		}
 		if debit == m.account {
-			t.Bookings[i].Debit = m.inferAccount(t, &t.Bookings[i], credit)
+			if account, score := m.inferAccount(t, &t.Bookings[i], credit); score > threshold {
+				t.Bookings[i].Debit = account
+			}
 		}
 	}
 }
 
-func (m *Model) inferAccount(t *syntax.Transaction, b *syntax.Booking, other string) syntax.Account {
+func (m *Model) inferAccount(t *syntax.Transaction, b *syntax.Booking, other string) (syntax.Account, float64) {
 	var (
 		tokens = tokenize(t, b, other)
 		max    = math.Inf(-1)
@@ -110,7 +115,7 @@ func (m *Model) inferAccount(t *syntax.Transaction, b *syntax.Booking, other str
 	}
 	return syntax.Account{
 		Range: syntax.Range{Start: 0, End: len(best), Text: best},
-	}
+	}, max
 }
 
 func (m *Model) scoreCandidate(candidate string, tokens set.Set[token]) float64 {
