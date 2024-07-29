@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -194,11 +195,9 @@ func (p *Parser) readBookingLine() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	// TODO: Check if this is the right place to fix invalid UTF8 strings.
-	description := strings.TrimSpace(strings.ToValidUTF8(rec[bfBookingText], ""))
 	p.builder.Add(transaction.Builder{
 		Date:        date,
-		Description: description,
+		Description: description(rec[bfBookingText], rec[bfSector]),
 		Postings: posting.Builder{
 			Credit:    p.registry.Accounts().TBDAccount(),
 			Debit:     p.account,
@@ -207,6 +206,18 @@ func (p *Parser) readBookingLine() (bool, error) {
 		}.Build(),
 	}.Build())
 	return true, nil
+}
+
+var space = regexp.MustCompile(`\s+`)
+
+func description(bookingText, sector string) string {
+	// TODO: Check if this is the right place to fix invalid UTF8 strings.
+	s := strings.ToValidUTF8(bookingText, "")
+	s = space.ReplaceAllString(s, " ")
+	if sector != "" {
+		s += " (" + sector + ")"
+	}
+	return s
 }
 
 func parseAmount(debit, credit string) (decimal.Decimal, error) {
