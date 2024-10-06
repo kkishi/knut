@@ -1,0 +1,3 @@
+﻿"Date","Payee","Account number","Transaction type","Payment reference","Amount (EUR)","Amount (Foreign Currency)","Type Foreign Currency","Exchange Rate"
+"2023-01-20","INTERACTIVE BROKERS LLC","XXXX","Income","2023-01-20","1000.0","","",""
+"2023-01-21","GOOGLE*TEMPORARY HOLD","","MasterCard Payment","","-1.44","-200.0","JPY","0.0072"
