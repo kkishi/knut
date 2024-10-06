@@ -30,6 +30,7 @@ import (
 	_ "github.com/sboehler/knut/cmd/importer/supercard"
 	_ "github.com/sboehler/knut/cmd/importer/swisscard"
 	_ "github.com/sboehler/knut/cmd/importer/swisscard2"
+	_ "github.com/sboehler/knut/cmd/importer/swisscard3"
 	_ "github.com/sboehler/knut/cmd/importer/swissquote"
 	_ "github.com/sboehler/knut/cmd/importer/ubsaccount"
 	_ "github.com/sboehler/knut/cmd/importer/ubscard"
