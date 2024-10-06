@@ -1,0 +1,12 @@
+﻿Account number:;0XX0 00XX0000.X0;
+IBAN:;CH20 00XX 0000 0000 0000 X;
+From:;2022-01-01;
+Until:;2022-12-31;
+Opening balance:;0.0;
+Closing balance:;900.0;
+Valued in:;CHF;
+Numbers of transactions in this period:;2;
+
+Trade date;Trade time;Booking date;Value date;Currency;Debit;Credit;Individual amount;Balance;Transaction no.;Description1;Description2;Description3;Footnotes;
+2022-12-31;16:58:11;2023-01-02;2022-12-31;CHF;-100.00;;;900.00;XXXXXXXXXXXXXXXX;"""Denner""";"""16787249-0 07/23; Debit card payment""";"Transaction no. XXXXXXXXXXXXXXXX";;
+2022-12-21;;2022-12-21;2022-12-21;CHF;;1000.00;;1000.00;0XXXXXXXXXXXXXXX;"""Larry&Sergey Protobuf Moving Co.""";"salary payment";"""Reason for payment: Salary /; Transaction no. 0XXXXXXXXXXXXXXX""";;

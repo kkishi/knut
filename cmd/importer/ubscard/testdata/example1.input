@@ -1,0 +1,9 @@
+﻿sep=;
+Account number;Card number;Account/Cardholder;Purchase date;Booking text;Sector;Amount;Original currency;Rate;Currency;Debit;Credit;Booked
+XXXX XXXX XXXX;XXXX XXXX XXXX XXXX;KEISUKE KISHIMOTO;17.07.2024;Hotel CHE;Hotels;689.04;CHF;;CHF;;;
+XXXX XXXX XXXX;;KEISUKE KISHIMOTO;27.06.2024;DIRECT DEBIT;;1680.75;CHF;;CHF;;1680.75;28.06.2024
+XXXX XXXX XXXX;XXXX XXXX XXXX XXXX;KEISUKE KISHIMOTO;31.12.2022;1.75% CHF SURCHARGE ABROAD;;0.06;CHF;;CHF;0.06;;03.01.2023
+XXXX XXXX XXXX;XXXX XXXX XXXX XXXX;KEISUKE KISHIMOTO;31.12.2022;aliexpress               Luxembourg   LUX;Discount stores;3.64;CHF;;CHF;3.64;;03.01.2023
+
+;;;;Total per currency;;;;;;;;Total
+;;;;Total card bookings;;;;;CHF;0.0;0.0;0.0
