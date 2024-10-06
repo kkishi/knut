@@ -197,7 +197,7 @@ func (p *Parser) readBookingLine() (bool, error) {
 	}
 	p.builder.Add(transaction.Builder{
 		Date:        date,
-		Description: description(rec[bfBookingText], rec[bfSector]),
+		Description: description(strings.TrimSpace(strings.ToValidUTF8(rec[bfBookingText], "")), rec[bfSector]),
 		Postings: posting.Builder{
 			Credit:    p.registry.Accounts().TBDAccount(),
 			Debit:     p.account,
