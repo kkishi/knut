@@ -214,7 +214,9 @@ func (p *Parser) readBookingLine() (bool, error) {
 		return false, err
 	}
 	desc := strings.TrimSpace(rec[bfDescription1])
-	desc = desc[1 : len(desc)-1] // TODO: Check that desc looked like "text".
+	if desc[0] == '"' {
+		desc = desc[1 : len(desc)-1]
+	}
 	p.builder.Add(transaction.Builder{
 		Date:        date,
 		Description: strings.TrimSpace(desc),

@@ -111,7 +111,7 @@ func (p *Parser) parse() error {
 	p.reader.LazyQuotes = true
 	p.reader.TrimLeadingSpace = true
 	p.reader.Comma = ','
-	p.reader.FieldsPerRecord = 9
+	p.reader.FieldsPerRecord = 11
 
 	if err := p.skipHeader(); err != nil {
 		return err
@@ -135,14 +135,16 @@ func (p *Parser) skipHeader() error {
 type bookingField int
 
 const (
-	bfDate bookingField = iota
-	bfPayee
-	bfAccountNumber
-	bfTransactionType
+	bfBookingDate bookingField = iota
+	bfValueDate
+	bfPartnerName
+	bfPartnerIban
+	bfType
 	bfPaymentReference
+	bfAccountName
 	bfAmountEUR
-	bfAmountForeignCurrency
-	bfTypeForeignCurrency
+	bfOriginalAmount
+	bfOriginalCurrency
 	bfExchangeRate
 )
 
@@ -154,7 +156,7 @@ func (p *Parser) readBookingLine() (bool, error) {
 		}
 		return false, err
 	}
-	date, err := time.Parse("2006-01-02", rec[bfDate])
+	date, err := time.Parse("2006-01-02", rec[bfBookingDate])
 	if err != nil {
 		return false, err
 	}
@@ -164,7 +166,7 @@ func (p *Parser) readBookingLine() (bool, error) {
 	}
 	p.builder.Add(transaction.Builder{
 		Date:        date,
-		Description: strings.TrimSpace(rec[bfPayee]),
+		Description: strings.TrimSpace(rec[bfPartnerName]),
 		Postings: posting.Builder{
 			Credit:    p.registry.Accounts().TBDAccount(),
 			Debit:     p.account,
