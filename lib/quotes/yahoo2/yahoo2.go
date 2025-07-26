@@ -53,11 +53,23 @@ func (c *Client) Fetch(sym string, t0, t1 time.Time) ([]Quote, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error creating URL for symbol %s: %w", sym, err)
 	}
-	resp, err := http.Get(u.String())
+	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching data from URL %s: %w", u.String(), err)
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("http error %s, could not read response body", resp.Status)
+		}
+		return nil, fmt.Errorf("http error %s: %s", resp.Status, body)
+	}
 	quote, err := decodeResponse(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("error decoding response for symbol %s (url: %s): %w", sym, u, err)
