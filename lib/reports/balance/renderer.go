@@ -33,6 +33,7 @@ type Renderer struct {
 	CommodityDetails   regex.Regexes
 	SortAlphabetically bool
 	Diff               bool
+	FullName          bool
 
 	drawCommsColumn bool
 	partition       date.Partition
@@ -98,7 +99,11 @@ func (rn *Renderer) renderNode(t *table.Table, indent int, neg bool, n *Node) {
 		}.Build())
 	}
 	if n.Segment != "" {
-		rn.render(t, indent, n.Segment, neg, vals)
+		name := n.Segment
+		if rn.FullName && n.Value.Account != nil {
+			name = n.Value.Account.Name()
+		}
+		rn.render(t, indent, name, neg, vals)
 	}
 	for _, ch := range n.Sorted {
 		rn.renderNode(t, indent+2, neg, ch)

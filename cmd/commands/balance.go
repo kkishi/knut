@@ -77,6 +77,7 @@ type balanceRunner struct {
 	diff               bool
 	showCommodities    flags.RegexFlag
 	sortAlphabetically bool
+	fullName          bool
 
 	// formatting
 	thousands bool
@@ -108,6 +109,7 @@ func (r *balanceRunner) setupFlags(c *cobra.Command) {
 	c.Flags().BoolVarP(&r.csv, "csv", "", false, "csv")
 	c.Flags().BoolVar(&r.close, "close", true, "close")
 	c.Flags().BoolVarP(&r.sortAlphabetically, "sort", "a", false, "Sort accounts alphabetically")
+	c.Flags().BoolVar(&r.fullName, "full-name", false, "Show full account names")
 	c.Flags().VarP(&r.showCommodities, "show-commodities", "s", "<regex>")
 	c.Flags().VarP(&r.valuation, "val", "v", "valuate in the given commodity")
 	c.Flags().VarP(&r.mapping, "map", "m", "<level>,<regex>")
@@ -131,6 +133,10 @@ func (r balanceRunner) execute(cmd *cobra.Command, args []string) error {
 	}
 	partition := r.Multiperiod.Partition(j.Period())
 	report := balance.NewReport(reg, partition)
+	accountMappers := []mapper.Mapper[*account.Account]{
+		account.Remap(reg.Accounts(), r.remap.Regex()),
+		account.Shorten(reg.Accounts(), r.mapping.Value()),
+	}
 	procs := []*journal.Processor{
 		check.Check(),
 		journal.ComputePrices(valuation),
@@ -141,8 +147,7 @@ func (r balanceRunner) execute(cmd *cobra.Command, args []string) error {
 			Select: amounts.KeyMapper{
 				Date: partition.Align(),
 				Account: mapper.Sequence(
-					account.Remap(reg.Accounts(), r.remap.Regex()),
-					account.Shorten(reg.Accounts(), r.mapping.Value()),
+					accountMappers...,
 				),
 				Commodity: mapper.Identity[*model.Commodity],
 				Valuation: commodity.IdentityIf(valuation != nil),
@@ -163,6 +168,7 @@ func (r balanceRunner) execute(cmd *cobra.Command, args []string) error {
 		CommodityDetails:   r.showCommodities.Regex(),
 		SortAlphabetically: r.sortAlphabetically,
 		Diff:               r.diff,
+		FullName:          r.fullName,
 	}
 	var tableRenderer Renderer
 	if r.csv {
